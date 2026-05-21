@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>7 Kasih Spenkop Ceria</title>
+    
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Libraries for Export & Charts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #1cc88a;
+            --accent: #f6c23e;
+            --dark: #2c3e50;
+            --light: #f8f9fc;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1523050853064-dbad350095ee?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            transition: 0.5s;
+        }
+
+        .school-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Navbar Custom */
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: white !important;
+        }
+        .nav-link { color: var(--dark) !important; font-weight: 500; }
+        .nav-link:hover { color: var(--primary) !important; }
+
+        /* Card Styling */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            margin-bottom: 15px;
+        }
+        .card:hover { transform: translateY(-5px); }
+
+        /* Section visibility */
+        .page-section { display: none; padding: 30px 0; min-height: 80vh; }
+        .active-section { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Google Form Style */
+        .form-google {
+            background: white;
+            border-top: 10px solid var(--primary);
+            border-radius: 8px;
+            padding: 25px;
+        }
+
+        /* Star Rating */
+        .stars { font-size: 30px; color: #ddd; cursor: pointer; }
+        .stars .active { color: var(--accent); }
+
+        /* Floating Action for Mobile */
+        @media (max-width: 768px) {
+            .hero { padding: 50px 15px; }
+            .hero h1 { font-size: 1.8rem; }
+            .btn-mobile-full { width: 100%; margin-bottom: 10px; }
+            .navbar-brand { font-size: 1rem; }
+            .container { padding-left: 20px; padding-right: 20px; }
+        }
+
+        .doc-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        /* Stats Dashboard */
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border-bottom: 5px solid var(--primary);
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="#" onclick="showSection('home')">
+                <i class="bi bi-heart-pulse-fill"></i> SPENKOP CERIA
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto text-center">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('home')">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="openProfilSekolah()">Profil Sekolah</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('dokumentasi')">Dokumentasi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('refleksi')">Refleksi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('saran')">Saran</a></li>
+                    <li class="nav-item" id="nav-login"><a class="btn btn-outline-primary ms-lg-3 mt-2 mt-lg-0" href="#" onclick="showSection('login')">Login</a></li>
+                    <li class="nav-item d-none" id="nav-dashboard"><a class="btn btn-primary ms-lg-3 mt-2 mt-lg-0" href="#" onclick="goToDashboard()">Dashboard</a></li>
+                    <li class="nav-item d-none" id="nav-logout"><a class="btn btn-danger ms-lg-2 mt-2 mt-lg-0" href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="hero" id="hero-bg">
+        <div class="container">
+           <img src="logo-sekolah.png" alt="Logo Sekolah" id="hero-logo" class="school-logo">
+            <h1 class="display-5 fw-bold" id="hero-title">SMP N Koperasi</h1>
+            <p class="lead" id="hero-desc">Membangun Karakter Melalui 7 Pembiasaan Positif</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- PAGE: HOME -->
+        <section id="home" class="page-section active-section">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Aplikasi 7 Kasih</h2>
+                <p class="text-muted">Pantau kegiatan harian siswa dengan mudah dan terintegrasi secara otomatis.</p>
+            </div>
+            <div class="row g-4 text-center">
+                <div class="col-md-4">
+                    <div class="card p-4 h-100">
+                        <i class="bi bi-person-check fs-1 text-primary"></i>
+                        <h4 class="mt-3">Guru</h4>
+                        <p>Memantau riwayat, laporan, dan identitas siswa secara real-time.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4 h-100">
+                        <i class="bi bi-pencil-square fs-1 text-success"></i>
+                        <h4 class="mt-3">Siswa</h4>
+                        <p>Mengisi jurnal pembiasaan karakter setiap hari melalui HP/Laptop.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-4 h-100">
+                        <i class="bi bi-people-fill fs-1 text-info"></i>
+                        <h4 class="mt-3">Orang Tua</h4>
+                        <p>Melihat perkembangan kegiatan pembiasaan anak dari mana saja.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: DOKUMENTASI -->
+        <section id="dokumentasi" class="page-section">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <h2 class="fw-bold">Dokumentasi Kegiatan</h2>
+                <button class="btn btn-primary btn-sm" onclick="openModalDoc()">+ Tambah Kegiatan</button>
+            </div>
+            <div class="row g-4" id="doc-list">
+                <!-- Dokumentasi muncul di sini -->
+            </div>
+        </section>
+
+        <!-- PAGE: REFLEKSI -->
+        <section id="refleksi" class="page-section">
+            <div class="card p-4 p-md-5 shadow-sm text-center">
+                <h2 class="fw-bold mb-4">Refleksi Diri</h2>
+                <p class="fst-italic">"Apa yang kita lakukan berulang kali adalah siapa kita. Keunggulan, bukanlah sebuah tindakan, melainkan sebuah kebiasaan."</p>
+                <div class="mt-4 text-start">
+                    <h5 class="fw-bold">Kenapa 7 Kasih Penting?</h5>
+                    <ul>
+                        <li>Membentuk disiplin diri sejak dini secara konsisten.</li>
+                        <li>Membangun hubungan harmonis dengan Tuhan, sesama, dan alam.</li>
+                        <li>Menjaga kesehatan fisik dan mental secara seimbang bagi masa depan.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: SARAN -->
+        <section id="saran" class="page-section">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-google shadow-sm mb-5">
+                        <h3 class="fw-bold mb-3">Kirim Saran & Rating</h3>
+                        <div class="mb-3">
+                            <label class="form-label">Nama Lengkap</label>
+                            <input type="text" id="saran-nama" class="form-control" placeholder="Masukkan nama...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select id="saran-status" class="form-select">
+                                <option value="Siswa">Siswa</option>
+                                <option value="Guru">Guru</option>
+                                <option value="Orang Tua">Orang Tua</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Saran Anda</label>
+                            <textarea id="saran-teks" class="form-control" rows="3" placeholder="Apa yang perlu diperbaiki?"></textarea>
+                        </div>
+                        <div class="mb-3 text-center">
+                            <label class="form-label d-block">Kepuasan Aplikasi</label>
+                            <div class="stars" id="star-rating">
+                                <i class="bi bi-star-fill" data-value="1"></i>
+                                <i class="bi bi-star-fill" data-value="2"></i>
+                                <i class="bi bi-star-fill" data-value="3"></i>
+                                <i class="bi bi-star-fill" data-value="4"></i>
+                                <i class="bi bi-star-fill" data-value="5"></i>
+                            </div>
+                            <input type="hidden" id="saran-rating" value="0">
+                        </div>
+                        <button class="btn btn-primary w-100" onclick="submitSaran()">Kirim Saran</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="fw-bold mb-3">Saran Terbaru</h3>
+                    <div id="display-saran-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: LOGIN -->
+        <section id="login" class="page-section">
+            <div class="row justify-content-center">
+                <div class="col-md-5 col-lg-4">
+                    <div class="card p-4 shadow">
+                        <h3 class="text-center fw-bold mb-4">Login Sistem</h3>
+                        <div class="mb-3">
+                            <label>Login Sebagai:</label>
+                            <select class="form-select" id="login-role" onchange="updateLoginField()">
+                                <option value="guru">Guru</option>
+                                <option value="siswa">Siswa</option>
+                                <option value="ortu">Orang Tua</option>
+                            </select>
+                        </div>
+                        <div id="username-box" class="mb-3">
+                            <label>Username:</label>
+                            <input type="text" id="login-user" class="form-control" value="guru">
+                        </div>
+                        <div class="mb-4">
+                            <label>Password / PIN:</label>
+                            <input type="password" id="login-pass" class="form-control" placeholder="Masukkan PIN">
+                        </div>
+                        <button class="btn btn-primary w-100 py-2 fw-bold" onclick="processLogin()">Masuk Ke Dashboard</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: DASHBOARD GURU -->
+        <section id="dash-guru" class="page-section">
+            <h2 class="fw-bold mb-4">Dashboard Guru</h2>
+            
+            <!-- Stats -->
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-3"><div class="stat-card"><h5>Total Siswa</h5><h3 id="stat-siswa">0</h3></div></div>
+                <div class="col-6 col-md-3"><div class="stat-card"><h5>Total Riwayat</h5><h3 id="stat-riwayat">0</h3></div></div>
+                <div class="col-6 col-md-3"><div class="stat-card"><h5>Bantuan</h5><h3 id="stat-bantuan">0</h3></div></div>
+                <div class="col-6 col-md-3"><div class="stat-card"><h5>Rating Avg</h5><h3 id="stat-rating-avg">0</h3></div></div>
+            </div>
+
+            <ul class="nav nav-tabs mb-4 overflow-auto flex-nowrap" id="guruTab" role="tablist">
+                <li class="nav-item"><button class="nav-link active text-nowrap" data-bs-toggle="tab" data-bs-target="#g-identitas">Identitas Siswa</button></li>
+                <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="tab" data-bs-target="#g-riwayat">Riwayat Kegiatan</button></li>
+                <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="tab" data-bs-target="#g-bantuan">Bantuan Siswa</button></li>
+                <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="tab" data-bs-target="#g-pengaturan">Pengaturan</button></li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Identitas -->
+                <div class="tab-pane fade show active" id="g-identitas">
+                    <div class="table-responsive">
+                        <table class="table table-hover bg-white rounded shadow-sm">
+                            <thead class="table-primary">
+                                <tr><th>Nama</th><th>Alamat</th><th>TTL</th><th>Kelas</th><th>Aksi</th></tr>
+                            </thead>
+                            <tbody id="table-identitas-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Riwayat -->
+                <div class="tab-pane fade" id="g-riwayat">
+                    <div class="mb-3 d-flex gap-2">
+                        <button class="btn btn-danger btn-sm" onclick="exportPDF()">Cetak PDF</button>
+                        <button class="btn btn-success btn-sm" onclick="exportExcel()">Backup Excel</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered bg-white" id="table-full-riwayat">
+                            <thead><tr><th>Tgl</th><th>Siswa</th><th>Kegiatan</th><th>Detail</th><th>Paraf</th><th>Aksi</th></tr></thead>
+                            <tbody id="table-riwayat-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Bantuan -->
+                <div class="tab-pane fade" id="g-bantuan">
+                    <div id="bantuan-list-container"></div>
+                </div>
+                <!-- Pengaturan -->
+                <div class="tab-pane fade" id="g-pengaturan">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card p-3">
+                                <h5>Info Aplikasi</h5>
+                                <div class="mb-2"><label>Nama Sekolah</label><input type="text" id="set-sekolah" class="form-control"></div>
+                                <div class="mb-3"><label>Deskripsi</label><input type="text" id="set-desc" class="form-control"></div>
+                                <button class="btn btn-primary" onclick="updateAppInfo()">Simpan Perubahan</button>
+                                <hr>
+                                <button class="btn btn-danger w-100" onclick="resetData()">RESET SEMUA DATA PERMANEN</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: DASHBOARD SISWA -->
+        <section id="dash-siswa" class="page-section">
+            <h2 class="fw-bold" id="welcome-siswa">Halo,</h2>
+            
+            <!-- Identitas Form (Muncul jika belum isi) -->
+            <div id="box-identitas-siswa" class="card p-4 border-primary mb-4 d-none">
+                <h5 class="text-primary fw-bold">Lengkapi Profil Kamu</h5>
+                <div class="row g-3">
+                    <div class="col-md-3"><input type="text" id="s-nama" class="form-control" placeholder="Nama Lengkap"></div>
+                    <div class="col-md-3"><input type="text" id="s-alamat" class="form-control" placeholder="Alamat"></div>
+                    <div class="col-md-3"><input type="text" id="s-ttl" class="form-control" placeholder="Tempat, Tanggal Lahir"></div>
+                    <div class="col-md-3"><input type="text" id="s-kls" class="form-control" placeholder="Kelas"></div>
+                </div>
+                <button class="btn btn-primary mt-3" onclick="saveSiswaProfile()">Simpan Profil</button>
+            </div>
+
+            <!-- Menu 7 Kasih -->
+            <div class="row g-2 g-md-3 mt-3">
+                <div class="col-6 col-md-3"><button class="btn btn-light w-100 py-4 shadow-sm h-100" onclick="openActivity('bangun')">⏰<br>Bangun Pagi</button></div>
+                <div class="col-6 col-md-3"><button class="btn btn-light w-100 py-4 shadow-sm h-100" onclick="openActivity('ibadah')">🕌<br>Beribadah</button></div>
+                <div class="col-6 col-md-3"><button class="btn btn-light w-100 py-4 shadow-sm h-100" onclick="openActivity('olahraga')">🏃<br>Olahraga & Sampah</button></div>
+                <div class="col-6 col-md-3"><button class="btn btn-light w-100 py-4 shadow-sm h-100" onclick="openActivity('makan')">🥗<br>Makan Sehat</button></div>
+                <div class="col-6 col-md-3"><button class="btn btn-light w-100 py-4 shadow-sm h-100" onclick="openActivity('belajar')">📚<br>Gemar Belajar</button></div>
+                <div class="col-6 col-md-3"><button class="btn btn-light w-100 py-4 shadow-sm h-100" onclick="openActivity('sosial')">🤝<br>Kegiatan Sosial</button></div>
+                <div class="col-6 col-md-3"><button class="btn btn-light w-100 py-4 shadow-sm h-100" onclick="openActivity('tidur')">🌙<br>Tidur Cepat</button></div>
+                <div class="col-6 col-md-3"><button class="btn btn-warning w-100 py-4 shadow-sm h-100" onclick="openActivity('bantuan')">🆘<br>Bantuan</button></div>
+            </div>
+
+            <h4 class="mt-5 fw-bold">Riwayat Saya</h4>
+            <div class="table-responsive">
+                <table class="table table-striped mt-2 bg-white">
+                    <thead><tr><th>Tanggal</th><th>Kegiatan</th><th>Detail</th><th>Paraf</th></tr></thead>
+                    <tbody id="my-riwayat"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- PAGE: DASHBOARD ORTU -->
+        <section id="dash-ortu" class="page-section">
+            <h2 class="fw-bold mb-4 text-center text-md-start">Laporan Orang Tua</h2>
+            <div class="card p-4">
+                <h5 class="fw-bold text-primary mb-3">Monitoring Kegiatan Anak</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-dark"><tr><th>Tanggal</th><th>Nama Siswa</th><th>Kegiatan</th><th>Paraf</th></tr></thead>
+                        <tbody id="ortu-riwayat"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: ACTIVITY FORM (DYNAMIC) -->
+        <section id="activity-form" class="page-section">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="form-google shadow" id="dynamic-form-content">
+                        <!-- Form Generated by JS -->
+                    </div>
+                    <button class="btn btn-secondary w-100 mt-3" onclick="goToDashboard()">Batal</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL PIN PROFIL -->
+    <div class="modal fade" id="modalPin" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-4 text-center">
+                    <h5 class="fw-bold">Akses Terbatas</h5>
+                    <p>Masukkan PIN Guru untuk Edit</p>
+                    <input type="password" id="input-pin" class="form-control mb-3 text-center" placeholder="****">
+                    <button class="btn btn-primary w-100" onclick="verifyPin()">Buka Pengaturan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT PROFIL -->
+    <div id="profil-sekolah-edit" class="page-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card p-4 shadow">
+                        <h3 class="fw-bold mb-4">Edit Profil & Tampilan</h3>
+                        <div class="mb-3">
+                            <label>Ganti Logo (Unggah Gambar)</label>
+                            <input type="file" id="up-logo" class="form-control" accept="image/*" onchange="previewImg(this, 'hero-logo')">
+                        </div>
+                        <div class="mb-4">
+                            <label>Ganti Background Hero (Unggah Gambar)</label>
+                            <input type="file" id="up-bg" class="form-control" accept="image/*" onchange="previewBg(this)">
+                        </div>
+                        <button class="btn btn-success w-100 fw-bold" onclick="saveVisualSettings()">Simpan Perubahan Tampilan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DOKUMENTASI (GURU) -->
+    <div class="modal fade" id="modalDoc" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5>Tambah Dokumentasi</h5></div>
+                <div class="modal-body">
+                    <div class="mb-3"><label>Masukkan PIN </label><input type="password" id="doc-pin" class="form-control" placeholder="****"></div>
+                    <hr>
+                    <div class="mb-3"><label>Nama Kegiatan</label><input type="text" id="doc-title" class="form-control"></div>
+                    <div class="mb-3"><label>Deskripsi Singkat</label><textarea id="doc-desc-input" class="form-control"></textarea></div>
+                    <div class="mb-3"><label>Pilih Foto</label><input type="file" id="doc-file" class="form-control" accept="image/*"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="saveDocumentation()">Unggah Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATA STORAGE INITIALIZATION
+        let db = JSON.parse(localStorage.getItem('spenkop_db')) || {
+            app: { name: "SMP N Koperasi", desc: "Membangun Karakter Melalui 7 Pembiasaan Positif", logo: "", bg: "" },
+            docs: [],
+            sarans: [],
+            siswa: [],
+            riwayat: [],
+            bantuan: []
+        };
+
+        let session = null; 
+
+        // NAVIGATION CONTROL
+        function showSection(id) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById(id).classList.add('active-section');
+            if (window.bootstrap && bootstrap.Collapse.getInstance(document.getElementById('navbarNav'))) {
+                bootstrap.Collapse.getInstance(document.getElementById('navbarNav')).hide();
+            }
+            window.scrollTo(0, 0);
+        }
+
+        const API_URL = "https://script.google.com/macros/s/AKfycbzREI8UCzL-X3w_pL2MMIt5RaEjv3x1J2T4olYwngSRwYfDcBpqSYHDRkYET8DM8A8UIg/exec";
+
+        // SINKRONISASI MENGGUNAKAN FETCH UNTUK GITHUB
+        async function loadDB() {
+            // Load from LocalStorage first to ensure data persists immediately
+            const localData = localStorage.getItem('spenkop_db');
+            if (localData) {
+                db = JSON.parse(localData);
+                renderUI();
+                updateStats();
+            }
+
+            if (!API_URL || API_URL === "GANTI_DENGAN_URL_WEB_APP_ANDA") return;
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                if (data) { 
+                    db = data; 
+                    localStorage.setItem('spenkop_db', JSON.stringify(db));
+                    renderUI(); 
+                    updateStats(); 
+                }
+            } catch (e) { console.error("Sinkron Gagal:", e); }
+        }
+
+        async function saveDB() {
+            // Always save to LocalStorage (Immediate Persistence)
+            localStorage.setItem('spenkop_db', JSON.stringify(db));
+            
+            if (!API_URL || API_URL === "GANTI_DENGAN_URL_WEB_APP_ANDA") return;
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(db)
+                });
+            } catch (e) { console.error("Simpan Cloud Gagal:", e); }
+        }
+
+        window.onload = function() {
+            loadDB();
+            setInterval(loadDB, 30000); // Sinkronisasi otomatis setiap 30 detik
+        };
+
+        function renderUI() {
+            // Hero Visuals
+            if (db.app.logo) document.getElementById('hero-logo').src = db.app.logo;
+            if (db.app.bg) document.getElementById('hero-bg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${db.app.bg})`;
+            document.getElementById('hero-title').innerText = db.app.name;
+            document.getElementById('hero-desc').innerText = db.app.desc;
+            document.getElementById('set-sekolah').value = db.app.name;
+            document.getElementById('set-desc').value = db.app.desc;
+
+            // Documentation List (Locked for non-guru)
+            let docHtml = '';
+            db.docs.forEach((d, index) => {
+                docHtml += `
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="${d.img}" class="doc-img">
+                        <div class="card-body">
+                            <h5 class="fw-bold">${d.title}</h5>
+                            <p class="text-muted small">${d.desc}</p>
+                            ${session && session.role === 'guru' ? `<button class="btn btn-sm btn-danger" onclick="deleteDoc(${index})">Hapus</button>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('doc-list').innerHTML = docHtml || '<p class="text-center w-100 text-muted">Belum ada dokumentasi kegiatan.</p>';
+
+            // Saran
+            let saranHtml = '';
+            db.sarans.slice().reverse().forEach(s => {
+                let stars = '';
+                for(let i=1; i<=5; i++) stars += `<i class="bi bi-star-fill ${i <= s.rating ? 'text-warning' : 'text-muted'}"></i>`;
+                saranHtml += `
+                <div class="card p-3 mb-3 border-start border-4 border-primary">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong>${s.nama} <span class="badge bg-light text-dark">${s.status}</span></strong>
+                        <div>${stars}</div>
+                    </div>
+                    <p class="mb-0 mt-2 small text-secondary">${s.teks}</p>
+                </div>`;
+            });
+            document.getElementById('display-saran-list').innerHTML = saranHtml || '<p class="text-muted">Belum ada saran masuk.</p>';
+
+            // Guru Dash: Identitas
+            let idHtml = '';
+            db.siswa.forEach((s, index) => {
+                idHtml += `<tr><td>${s.nama}</td><td>${s.alamat}</td><td>${s.ttl}</td><td>${s.kls}</td><td><button class="btn btn-danger btn-sm" onclick="deleteSiswa(${index})"><i class="bi bi-trash"></i></button></td></tr>`;
+            });
+            document.getElementById('table-identitas-body').innerHTML = idHtml;
+
+            // Guru Dash: Riwayat
+            let riwHtml = '';
+            db.riwayat.slice().reverse().forEach((r, index) => {
+                let realIndex = db.riwayat.length - 1 - index;
+                riwHtml += `<tr><td>${r.tgl}</td><td>${r.nama}</td><td>${r.tipe}</td><td>${r.detail}</td><td><span class="badge bg-info">${r.paraf}</span></td><td><button class="btn btn-danger btn-sm" onclick="deleteRiwayat(${realIndex})"><i class="bi bi-trash"></i></button></td></tr>`;
+            });
+            document.getElementById('table-riwayat-body').innerHTML = riwHtml;
+
+            // Guru Dash: Bantuan
+            let banHtml = '';
+            db.bantuan.forEach((b, index) => {
+                banHtml += `<div class="alert alert-warning d-flex justify-content-between align-items-center">
+                    <div><strong>${b.nama}:</strong> ${b.pesan} <br><small>${b.tgl}</small></div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteBantuan(${index})">Hapus</button>
+                </div>`;
+            });
+            document.getElementById('bantuan-list-container').innerHTML = banHtml || '<p class="text-muted">Tidak ada permintaan bantuan.</p>';
+        }
+
+        // DELETE FUNCTIONS
+        function deleteSiswa(i) { if(confirm("Hapus data siswa ini secara permanen?")) { db.siswa.splice(i, 1); saveDB(); renderUI(); updateStats(); } }
+        function deleteRiwayat(i) { if(confirm("Hapus riwayat ini secara permanen?")) { db.riwayat.splice(i, 1); saveDB(); renderUI(); updateStats(); } }
+        function deleteBantuan(i) { if(confirm("Hapus pesan bantuan ini?")) { db.bantuan.splice(i, 1); saveDB(); renderUI(); updateStats(); } }
+
+        // LOGIN SYSTEM
+        function updateLoginField() {
+            let role = document.getElementById('login-role').value;
+            document.getElementById('username-box').style.display = (role === 'guru') ? 'block' : 'none';
+        }
+
+        function processLogin() {
+            let role = document.getElementById('login-role').value;
+            let user = document.getElementById('login-user').value;
+            let pass = document.getElementById('login-pass').value;
+
+            if (role === 'guru') {
+                if (user === 'guru' && (pass === '12345' || pass === '54321')) {
+                    session = { role: 'guru', name: 'Admin Guru' };
+                } else { return alert('Username/Password Guru Salah!'); }
+            } else if (role === 'siswa') {
+                if (pass === '123') {
+                    session = { role: 'siswa', name: 'Siswa' };
+                } else { return alert('PIN Siswa Salah!'); }
+            } else if (role === 'ortu') {
+                if (pass === '321') {
+                    session = { role: 'ortu', name: 'Orang Tua' };
+                } else { return alert('PIN Orang Tua Salah!'); }
+            }
+
+            document.getElementById('nav-login').classList.add('d-none');
+            document.getElementById('nav-dashboard').classList.remove('d-none');
+            document.getElementById('nav-logout').classList.remove('d-none');
+            
+            goToDashboard();
+            renderUI();
+        }
+
+        function logout() {
+            session = null;
+            document.getElementById('nav-login').classList.remove('d-none');
+            document.getElementById('nav-dashboard').classList.add('d-none');
+            document.getElementById('nav-logout').classList.add('d-none');
+            showSection('home');
+            renderUI(); // Re-render to hide teacher delete buttons
+        }
+
+        function goToDashboard() {
+            if (!session) return showSection('login');
+            if (session.role === 'guru') showSection('dash-guru');
+            if (session.role === 'ortu') {
+                showSection('dash-ortu');
+                renderOrtuView();
+            }
+            if (session.role === 'siswa') {
+                showSection('dash-siswa');
+                checkSiswaProfile();
+                renderMyRiwayat();
+            }
+        }
+
+        // PROFIL SEKOLAH
+        function openProfilSekolah() {
+            if (session && session.role === 'guru') {
+                showSection('profil-sekolah-edit');
+            } else {
+                new bootstrap.Modal(document.getElementById('modalPin')).show();
+            }
+        }
+
+        function verifyPin() {
+            let pin = document.getElementById('input-pin').value;
+            if (pin === '12345') {
+                bootstrap.Modal.getInstance(document.getElementById('modalPin')).hide();
+                showSection('profil-sekolah-edit');
+            } else { alert("PIN Salah!"); }
+        }
+
+        function previewImg(input, targetId) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById(targetId).src = e.target.result;
+                    if(targetId === 'hero-logo') db.app.logo = e.target.result;
+                    saveDB();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function previewBg(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('hero-bg').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${e.target.result})`;
+                    db.app.bg = e.target.result;
+                    saveDB();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function saveVisualSettings() {
+            saveDB();
+            alert("Tampilan disimpan permanen di perangkat ini!");
+            showSection('home');
+        }
+
+        function updateAppInfo() {
+            db.app.name = document.getElementById('set-sekolah').value;
+            db.app.desc = document.getElementById('set-desc').value;
+            saveDB();
+            renderUI();
+            alert("Data sekolah diupdate!");
+        }
+
+        // DOKUMENTASI SYSTEM
+        function openModalDoc() { 
+            document.getElementById('doc-pin').value = "";
+            new bootstrap.Modal(document.getElementById('modalDoc')).show(); 
+        }
+        
+        function saveDocumentation() {
+            let pin = document.getElementById('doc-pin').value;
+            if (pin !== '12345') return alert("PIN Salah!");
+
+            let title = document.getElementById('doc-title').value;
+            let desc = document.getElementById('doc-desc-input').value;
+            let file = document.getElementById('doc-file').files[0];
+            
+            if (!title || !file) return alert("Isi judul dan pilih foto!");
+
+            let reader = new FileReader();
+            reader.onload = e => {
+                db.docs.push({ title, desc, img: e.target.result });
+                saveDB();
+                renderUI();
+                bootstrap.Modal.getInstance(document.getElementById('modalDoc')).hide();
+                alert("Dokumentasi berhasil diunggah!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function deleteDoc(i) {
+            if(confirm("Hapus dokumentasi ini secara permanen?")) {
+                db.docs.splice(i, 1);
+                saveDB();
+                renderUI();
+            }
+        }
+
+        // SISWA DASHBOARD SYSTEM
+        function checkSiswaProfile() {
+            let hasProfile = localStorage.getItem('spenkop_myprofile');
+            if (!hasProfile) {
+                document.getElementById('box-identitas-siswa').classList.remove('d-none');
+            } else {
+                let p = JSON.parse(hasProfile);
+                document.getElementById('welcome-siswa').innerText = "Halo, " + p.nama + "!";
+                document.getElementById('box-identitas-siswa').classList.add('d-none');
+            }
+        }
+
+        function saveSiswaProfile() {
+            let profile = {
+                nama: document.getElementById('s-nama').value,
+                alamat: document.getElementById('s-alamat').value,
+                ttl: document.getElementById('s-ttl').value,
+                kls: document.getElementById('s-kls').value
+            };
+            if(!profile.nama) return alert("Nama harus diisi!");
+            
+            // Periksa apakah sudah ada di db.siswa global
+            let exist = db.siswa.findIndex(s => s.nama === profile.nama);
+            if(exist === -1) db.siswa.push(profile);
+            
+            localStorage.setItem('spenkop_myprofile', JSON.stringify(profile));
+            saveDB();
+            renderUI();
+            checkSiswaProfile();
+        }
+
+        function renderMyRiwayat() {
+            let p = JSON.parse(localStorage.getItem('spenkop_myprofile'));
+            if (!p) return;
+            let myData = db.riwayat.filter(r => r.nama === p.nama);
+            let html = '';
+            myData.slice().reverse().forEach(r => {
+                html += `<tr><td>${r.tgl}</td><td>${r.tipe}</td><td>${r.detail}</td><td>${r.paraf}</td></tr>`;
+            });
+            document.getElementById('my-riwayat').innerHTML = html;
+        }
+
+        // 7 KASIH FORMS
+        function openActivity(type) {
+            let p = JSON.parse(localStorage.getItem('spenkop_myprofile'));
+            if (!p && type !== 'bantuan') return alert("Harap isi profil kamu terlebih dahulu!");
+
+            let content = document.getElementById('dynamic-form-content');
+            let today = new Date().toISOString().split('T')[0];
+            let html = `<h3 class="fw-bold text-primary mb-3 text-capitalize">${type.replace('-',' ')}</h3>`;
+
+            if (type === 'bangun') {
+                html += `<div class="mb-3"><label>Tanggal</label><input type="date" id="f-tgl" class="form-control" value="${today}"></div>
+                <div class="mb-3"><label>Bangun Pagi?</label><div class="form-check"><input type="radio" name="opt" value="Ya" class="form-check-input"> Ya</div><div class="form-check"><input type="radio" name="opt" value="Tidak" class="form-check-input"> Tidak</div></div>
+                <div class="mb-3"><label>Jam Bangun</label><input type="time" id="f-jam" class="form-control"></div>`;
+            } else if (type === 'ibadah') {
+                html += `<div class="mb-3"><label>Tanggal</label><input type="date" id="f-tgl" class="form-control" value="${today}"></div>
+                <div class="mb-3"><label>Kegiatan Ibadah</label><select id="f-sholat" class="form-select"><option>Subuh</option><option>Zuhur</option><option>Asar</option><option>Magrib</option><option>Isya</option><option>Ibadah Lainnya</option></select></div>
+                <div class="mb-3"><label>Keterangan (Surat/Doa)</label><input type="text" id="f-quran" class="form-control"></div>`;
+            } else if (type === 'olahraga') {
+                html += `<div class="mb-3"><label>Tanggal</label><input type="date" id="f-tgl" class="form-control" value="${today}"></div>
+                <div class="mb-3"><input type="checkbox" id="f-ol"> Olahraga Hari ini</div>
+                <div class="mb-3"><input type="checkbox" id="f-sm"> Pungut Sampah Hari ini</div>
+                <div class="mb-3"><label>Lokasi Pungut Sampah</label><input type="text" id="f-loc" class="form-control" placeholder="Sekolah/Rumah"></div>`;
+            } else if (type === 'makan') {
+                html += `<div class="mb-3"><label>Tanggal</label><input type="date" id="f-tgl" class="form-control" value="${today}"></div>
+                <div class="mb-3"><input type="checkbox" id="f-m3"> Makan 3x Sehari</div>
+                <div class="mb-3"><label>Menu Hari Ini</label><input type="text" id="f-m-pagi" class="form-control" placeholder="Contoh: Sayur & Ikan"></div>`;
+            } else if (type === 'belajar') {
+                html += `<div class="mb-3"><label>Tanggal</label><input type="date" id="f-tgl" class="form-control" value="${today}"></div>
+                <div class="mb-3"><label>Mata Pelajaran</label><input type="text" id="f-topik" class="form-control"></div>`;
+            } else if (type === 'sosial') {
+                html += `<div class="mb-3"><label>Tanggal</label><input type="date" id="f-tgl" class="form-control" value="${today}"></div>
+                <div class="mb-3"><label>Bentuk Kegiatan</label><input type="text" id="f-kg" class="form-control"></div>
+                <div class="mb-3"><label>Bersama Siapa?</label><select id="f-who" class="form-select"><option>Sendiri</option><option>Keluarga</option><option>Teman</option></select></div>`;
+            } else if (type === 'tidur') {
+                html += `<div class="mb-3"><label>Tanggal</label><input type="date" id="f-tgl" class="form-control" value="${today}"></div>
+                <div class="mb-3"><label>Jam Berapa Tidur?</label><input type="time" id="f-jamt" class="form-control"></div>`;
+            } else if (type === 'bantuan') {
+                html += `<div class="mb-3"><label>Apa kendala kamu?</label><textarea id="f-help" class="form-control" rows="4"></textarea></div>`;
+            }
+
+            if (type !== 'bantuan') {
+                html += `<div class="mb-3"><label>Catatan</label><textarea id="f-note" class="form-control"></textarea></div>
+                <div class="mb-3"><label>Paraf</label><select id="f-paraf" class="form-select"><option>Guru</option><option>Orang Tua</option></select></div>
+                <button class="btn btn-primary w-100" onclick="submitActivity('${type}')">Kirim Laporan</button>`;
+            } else {
+                html += `<button class="btn btn-danger w-100" onclick="submitBantuan()">Kirim Bantuan</button>`;
+            }
+
+            content.innerHTML = html;
+            showSection('activity-form');
+        }
+
+        function submitActivity(tipe) {
+            let p = JSON.parse(localStorage.getItem('spenkop_myprofile'));
+            let detail = "";
+            
+            if (tipe === 'bangun') detail = "Bangun jam " + document.getElementById('f-jam').value;
+            if (tipe === 'ibadah') detail = "Ibadah: " + document.getElementById('f-sholat').value;
+            if (tipe === 'olahraga') detail = "Olahraga: " + (document.getElementById('f-ol').checked ? 'Ya' : 'Tidak');
+            if (tipe === 'makan') detail = "Menu: " + document.getElementById('f-m-pagi').value;
+            if (tipe === 'belajar') detail = "Belajar: " + document.getElementById('f-topik').value;
+            if (tipe === 'sosial') detail = "Sosial: " + document.getElementById('f-kg').value;
+            if (tipe === 'tidur') detail = "Tidur jam: " + document.getElementById('f-jamt').value;
+
+            db.riwayat.push({
+                tgl: document.getElementById('f-tgl').value,
+                nama: p.nama,
+                tipe: tipe,
+                detail: detail,
+                paraf: document.getElementById('f-paraf').value,
+                catatan: document.getElementById('f-note').value
+            });
+
+            saveDB(); renderUI(); updateStats(); alert("Laporan terkirim!"); goToDashboard();
+        }
+
+        function submitBantuan() {
+            let p = JSON.parse(localStorage.getItem('spenkop_myprofile')) || {nama: "Anonim"};
+            db.bantuan.push({
+                nama: p.nama, pesan: document.getElementById('f-help').value, tgl: new Date().toLocaleString()
+            });
+            saveDB(); renderUI(); updateStats(); alert("Permintaan bantuan terkirim!"); goToDashboard();
+        }
+
+        // SARAN & RATING
+        function initStars() {
+            document.querySelectorAll('#star-rating i').forEach(star => {
+                star.onclick = function() {
+                    let val = this.getAttribute('data-value');
+                    document.getElementById('saran-rating').value = val;
+                    document.querySelectorAll('#star-rating i').forEach(s => {
+                        s.classList.toggle('active', s.getAttribute('data-value') <= val);
+                        s.classList.toggle('text-warning', s.getAttribute('data-value') <= val);
+                    });
+                }
+            });
+        }
+        initStars();
+
+        function submitSaran() {
+            let nama = document.getElementById('saran-nama').value;
+            let status = document.getElementById('saran-status').value;
+            let teks = document.getElementById('saran-teks').value;
+            let rating = document.getElementById('saran-rating').value;
+            if(!nama || !teks) return alert("Lengkapi data.");
+            db.sarans.push({ nama, status, teks, rating });
+            saveDB(); renderUI(); updateStats(); alert("Terima kasih atas sarannya!");
+            document.getElementById('saran-nama').value = ''; document.getElementById('saran-teks').value = '';
+        }
+
+        // STATS
+        function updateStats() {
+            document.getElementById('stat-siswa').innerText = db.siswa.length;
+            document.getElementById('stat-riwayat').innerText = db.riwayat.length;
+            document.getElementById('stat-bantuan').innerText = db.bantuan.length;
+            let totalRating = db.sarans.reduce((acc, curr) => acc + parseInt(curr.rating), 0);
+            let avg = db.sarans.length ? (totalRating / db.sarans.length).toFixed(1) : 0;
+            document.getElementById('stat-rating-avg').innerText = avg + "/5";
+        }
+
+        function renderOrtuView() {
+            let riwHtml = '';
+            db.riwayat.slice().reverse().forEach(r => {
+                riwHtml += `<tr><td>${r.tgl}</td><td>${r.nama}</td><td>${r.tipe}</td><td>${r.paraf}</td></tr>`;
+            });
+            document.getElementById('ortu-riwayat').innerHTML = riwHtml;
+        }
+
+        // EXPORT
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Laporan Riwayat 7 Kasih", 14, 15);
+            doc.autoTable({ html: '#table-full-riwayat', startY: 20 });
+            doc.save('Laporan_7Kasih.pdf');
+        }
+
+        function exportExcel() {
+            const ws = XLSX.utils.json_to_sheet(db.riwayat);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Riwayat");
+            XLSX.writeFile(wb, "Backup_Spenkop.xlsx");
+        }
+
+        function resetData() {
+            if(confirm("Hapus semua data permanen? Tindakan ini tidak bisa dibatalkan.")) { 
+                localStorage.clear(); 
+                location.reload(); 
+            }
+        }
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
